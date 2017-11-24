@@ -1,5 +1,8 @@
 ChangeLog
 
+WARNING - THE LAST VERSION OF THIS SOFTWARE IS FROM 2003. KEPT HERE JUST FOR HISTORICAL REASONS.
+
+
 - User
 	Adição de usuários (cria maildir via mkdir $HOME e maildirmake $HOME/Maildir e habilita quota via maildirmake -q)
 	Remoção de usuários (somente remove da base de dados LDAP, não remove spool)
