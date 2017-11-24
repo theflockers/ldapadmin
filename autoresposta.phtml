@@ -1,0 +1,46 @@
+<?
+
+include "config/config.php";
+include "include/ldap_connection.inc";
+include "logon.php";
+
+include "include/header_noimg.inc";
+
+$userdn=user_dnparse($_POST['username'],$_POST['domain']).",ou=Domains,".$config['ldapdn'];
+
+switch($_POST['action']) {
+	case "modifydn":
+
+		echo "<pre>";
+//		print_r($userdn);
+		include "templates/autoresposta.inc";
+
+		$ret=@ldap_modify($conn,$userdn,$info);
+
+		if($ret){
+
+			$home=homeparse($_POST['username'],$_POST['domain']);
+
+			$tmpfile="tmp/autoresposta-".date("U");
+			$fp=fopen($tmpfile,"w");
+
+			fputs($fp,$info['mailAutoReplyText']."\n");
+
+			fclose($fp);
+			
+			exec("sudo bin/autoresposta.php $home \"".$info['mailAutoReplySubject']."\" $tmpfile");
+			echo "<script>
+					      alert('Alterado com sucesso');
+					      opener.location.reload();
+				         self.close();
+		  	        </script>";
+		}else{
+			echo "<script>
+				alert('Erro ao adicionar: (".ldap_error($conn).")');
+				self.close();
+			      </script>";
+
+		}
+	break;
+}
+?>

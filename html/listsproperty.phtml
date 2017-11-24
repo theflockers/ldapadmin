@@ -1,0 +1,78 @@
+<body class="pop" onload="opener.location.reload()">
+
+<!-- Member input form -->
+<div id="input_frm" class="verdana12">
+ <div id="wdecoration">&nbsp;<span style="color: #777">.:: LDAP Mail Manager ::.</span>
+  <div id="close" onclick="hide('input_frm')" >X</div>
+ </div>
+ <br/>
+
+  <input id="dn" type="hidden" value="<? echo $_GET['dn']; ?>" />
+  <fieldset>
+   <legend class="verdana13-bold">Novo membro</legend>
+    E-mail: <input type="text" id="mailmember" onKeyDown="if(event.keyCode==13) save('GET','memberlistadd.phtml');" />
+   <input class="minibutton" type="button" value="OK"  onclick="save('GET','memberlistadd.phtml')" />
+  </fieldset>
+
+
+
+</div>
+<!-- end -->
+
+<div id="formDomainUser">
+
+<div class="poptitle">Propriedades da Lista <?php echo $object[0]['cn'][0]; ?></div>
+<br/>
+<table id="formIntDomainUser">
+ <form name="edituser" method="POST" action="listsmod.phtml">
+	<input type="hidden" name="cn" value="<?php echo $object[0]['cn'][0];?>" />
+	<input type="hidden" name="dn" value="<?php echo $object[0]['dn'];?>" />
+	<tr>
+	 <td valign="top">
+ 	  <table>
+ 	     <tr><td colspan="2" class="popsubtitle" >Lista: <?php echo $object[0]['cn'][0];?></td>
+ 	     	</tr>
+ 		  <tr>
+  			<td style="padding: 5px;" >Descri&ccedil;&atilde;o:</td>
+  			<td><input type="text" name="sn" value="<?php echo $object[0]['sn'][0]; ?>"/>
+  			</td>
+ 		  </tr> 	     	
+ 		  <tr>
+  			<td style="padding: 5px;" >Endere&ccedil;o difusor:</td>
+  			<td><input name="mail" value="<?php echo $object[0]['mail'][0]; ?>" />
+  			</td>
+ 		  </tr>
+ 		  <tr>
+  			<td style="padding: 5px;" >Membros:</td>
+  			<td>
+			    <select id="members"  name="members" multiple size="4" style="width: 200px">
+			        <?
+				   foreach($object[0]['rfc822mailmember'] as $option) {
+					if(!is_integer($option)) {
+						echo "<option value='$option' >$option</option>";
+					}
+				   }
+				?>
+			    </select>
+		  </tr> 
+ 		  <tr>
+  			<td style="padding: 5px;" >&nbsp;</td>
+		 	<td><input class="minibutton" type="button" value="Add" onclick="show_dialog('input_frm','mailmember')">
+			<input class="minibutton" type="button" value="Remove" onclick="del('GET','memberlistdel.phtml')" /></td>
+
+ 		  </tr>
+
+ 	 </table>
+    </td>
+   </tr>
+ </table>
+ <table align="center" style="padding: 5px;">
+ <tr>
+   <td><input class="button" type="button" value="Salvar" onclick="edituser.submit()"></td>
+   <td><input class="button" type="button" value="Cancel" onclick="close_window('Deseja realmente sair sem salvar?')"></td>
+ </tr>
+</table>
+</form>
+</div>
+</body>
+</html>

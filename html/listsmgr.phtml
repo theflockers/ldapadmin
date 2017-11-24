@@ -1,0 +1,54 @@
+<table cellspacing="0">
+ <tr>
+  <th class="rowtitle" style="background-image: url('images/bar.jpg')">&nbsp;</th>
+  <th class="coltitle" style="background-image: url('images/bar.jpg')" width="200">Lista</th>
+  <th class="coltitle" style="background-image: url('images/bar.jpg')" width="240">Endere&ccedil;o</th>
+ </tr>
+
+<?php
+        if($_SESSION['user']=="admin") {
+
+		$filter="(&(objectClass=inetmailgroup))";
+		$usearch=ldap_search($conn,"ou=Lists,".$config['ldapdn'],$filter,$attr=array("sn","mail"));
+	}else{
+		$filter="(&(objectClass=inetmailgroup)(associatedDomain=".$_SESSION['domain']."))";
+		$usearch=ldap_search($conn,"ou=Lists,".$config['ldapdn'],$filter,$attr=array("sn","mail"));
+	}
+
+	ldap_sort($conn,$usearch,"sn");
+
+	$userobject=ldap_get_entries($conn,$usearch);
+
+	if($userobject['count']==0){
+		echo "<tr>\n";
+		echo "<td align=\"center\" class=\"rowtitle\" style=\"background-image: url('images/bar.jpg')\">0</td>";
+		echo " <td colspan=\"4\" align=\"center\" class=\"rowvalue\"><i>(N&atilde;o h&aacute; listas cadastradas)</i></td>";
+		echo "</tr>\n";
+	}
+
+	for($z=0;$z<count($userobject);$z++) {
+//		echo "<tr id=\"".$z."\" onmouseover=\"showtip('".$z."','tip".$z."')\" onmouseout=\"showtip('".$z."','tip".$z."')\">\n";
+		
+//		echo "<div id=\"tip".$z."\" class=\"tip\" style=\"position: absolute; top: 0px; left: 0px;\">".$userobject[$z]['cn'][0]."</div>";
+		
+		if($userobject[$z]['sn']) {
+			echo "<td align=\"center\" class=\"rowtitle\" style=\"background-image: url('images/bar.jpg')\">".($z+1)."</td>";
+			echo "<td class=\"rowvalue\">".$userobject[$z]['sn'][0]."</td>";
+			echo "<td class=\"rowvalue\">".$userobject[$z]['mail'][0]."</td>";
+			echo "<td><a onclick=\"asktodo('index.php?menuopt=lists&&option=del&&dn=".$userobject[$z]['dn']."','Deseja excluir o usuario ".$userobject[$z]['mail'][0]."?')\"><img src=\"images/delete.png\" /></td>";
+			echo "<td><a onclick=\"openwin('property.phtml?obj=lists&&dn=".$userobject[$z]['dn']."','prop','usrdom_menu')\"><img src=\"images/Repair.png\" /></td>";
+			
+		}
+			//print_r($userobject);
+		echo "</tr>\n";
+	}
+
+?>
+</table>
+<script>
+	if(GetBrowser()=="NS") {	
+		document.getElementById('domains').style.visibility='visible';
+	}else{
+		document.getElementById('domains').style.display='inline';
+	}
+</script>

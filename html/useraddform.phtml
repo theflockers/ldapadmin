@@ -1,0 +1,47 @@
+<body class="pop" onload="opener.location.reload()">
+<div id="formAddUser">
+
+<form name="adduser" method="POST" action="useradd.phtml">
+<input type="hidden" name="action" value="add">
+
+<div class="poptitle">Adicionar Usu&aacute;rio</div>
+<br/>
+<table id="formIntAddUser">
+	<tr>
+	 <td valign="top">
+ 	  <table>
+		  <tr>
+		   <td colspan="2" class="popsubtitle">Novo usuario@<?php echo $_GET['domain']; ?></td>
+  		  </tr>
+ 		  <tr>
+  			<td style="padding: 5px;">Nome Real:</td>
+  			<td><input type="text" name="surename"></td>
+ 		  <tr>
+  			<td style="padding: 5px;" >Login:</td>
+  			<td><input type="text" name="username" />
+       	<input type="hidden" name="domain" value="<?php echo $_GET['domain']; ?>" />
+  			</td>
+ 		  </tr>
+ 		  <tr>
+  			<td style="padding: 5px;">Senha:</td>
+  			<td><input type="password" name="password"></td>
+ 		  </tr>
+ 		  <tr>
+  			<td style="padding: 5px;">Quota:</td>
+  			<td><input style="width: 50px" type="text" name="quota">&nbsp;<i>( <? echo (($_SESSION['quotaforcreate'])/1024)/1024;?> MBytes dispon&iacute;veis)</i></td>
+ 		  </tr>
+
+ 	 </table>
+   </td>
+  </tr>
+ </table>
+ <table align="center" style="padding: 5px;">
+ <tr>
+   <td><INPUT class="button" type="submit" value="Adicionar"></td>
+   <td><INPUT class="button" type="button" value="Cancel" onclick="self.close()"></td>
+ </tr>
+</table>
+</form>
+</div>
+</body>
+</html>

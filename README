@@ -1,0 +1,16 @@
+ChangeLog
+
+- User
+	Adição de usuários (cria maildir via mkdir $HOME e maildirmake $HOME/Maildir e habilita quota via maildirmake -q)
+	Remoção de usuários (somente remove da base de dados LDAP, não remove spool)
+	Edição de usuários (Somente de dados necessários)
+	Alteração de senha
+
+- Domain
+	Adicionar Dominio
+	Remover Dominio
+	Editar Dominio (Edita somente Descrição)
+	
+TODO
+	Alteração de quota; (somente possível removendo usuário e adicionando novamente);
+	

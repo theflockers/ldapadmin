@@ -1,0 +1,36 @@
+<body class="pop" onload="opener.location.reload()">
+<div id="formAddUser">
+
+<div class="poptitle">Redirecionamento <?php echo $object[0]['cn'][0]; ?></div>
+<br/>
+<table id="formIntAddUser">
+ <form name="edituser" method="POST" action="redirect.phtml">
+	<input type="hidden" name="action" value="modifydn" />
+	<input type="hidden" name="username" value="<?php echo $object[0]['cn'][0]; ?>" />
+	<input type="hidden" name="surename" value="<?php echo $object[0]['sn'][0]; ?>" />
+	<input type="hidden" name="domain" value="<?php echo $object[0]['associateddomain'][0];?>" />
+	<tr>
+	 <td valign="top">
+ 	  <table>
+ 	     <tr><td colspan="2" class="popsubtitle" >Usu&aacute;rio: <?php echo $object[0]['cn'][0]."@".$object[0]['associateddomain'][0];?></td>
+ 	     	</tr>
+		<tr>
+  		 <td style="padding: 5px;">Redirecionar para:</td>
+  		 <td><input type="text" name="mailforwardingaddress" value="<?php echo $object[0]['mailforwardingaddress'][0]; ?>"></td>
+		</tr>
+  		<tr>
+  		 <td>&nbsp;</td>
+  		 <td><i>(mail@dominio.com.br)</i></td>
+        </tr>
+	</table>
+ </table>
+ <table align="center" style="padding: 5px;">
+  <tr>
+   <td><input class="button" type="submit" value="Alterar"></td>
+   <td><input class="button" type="button" value="Cancel" onclick="self.close()"></td>
+ </tr>
+</table>
+</form>
+</div>
+</body>
+</html>

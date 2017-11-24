@@ -1,0 +1,31 @@
+<?php
+
+include "config/config.php";
+include "include/ldap_connection.inc";
+include "logon.php";
+//include "include/functions.php";
+
+include "include/header_noimg.inc";
+
+ 	   
+	  //$dn="cn=".$_POST['mail'].",ou=Lists,".$config['ldapdn'];
+	  $dn=$_POST['dn'];
+
+  	   include "templates/inetmailgroup.inc";
+
+		$ret=@ldap_modify($conn,$dn,$info);
+
+		if($ret){
+			include "include/clistaliasfile.php";
+			echo "<script>
+					      alert('Lista salva com sucesso');
+					      opener.location.reload();
+				         self.close();
+		  	        </script>";
+		}else{
+			echo "<script>
+				alert('Erro ao alterar alias: (".ldap_error($conn).")');
+				self.close();
+			      </script>";
+ 		}			      
+?>

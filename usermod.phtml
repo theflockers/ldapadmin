@@ -1,0 +1,52 @@
+<?php
+
+include "config/config.php";
+include "include/ldap_connection.inc";
+include "logon.php";
+
+include "include/header_noimg.inc";
+
+$userdn=user_dnparse($_POST['username'],$_POST['domain']).",ou=Domains,".$config['ldapdn'];
+
+switch($_POST['action']) {
+	case "modifydn":
+
+		include "templates/useredit.inc";
+
+		$ret=@ldap_modify($conn,$userdn,$info);
+
+		if($ret){
+			exec("sudo bin/altuserquota ".$info['mailMessageStore']." ".$info['mailQuota']);
+			echo "<script>
+					      alert('Alterado com sucesso');
+					      opener.location.reload();
+				         self.close();
+		  	        </script>";
+		}else{
+			echo "<script>
+				alert('Erro ao adicionar: (".ldap_error($conn).")');
+				self.close();
+			      </script>";
+		}
+	break;
+	case "modifypw":
+  	   include "templates/pwedit.inc";
+  	   
+		$ret=@ldap_modify($conn,$userdn,$info);
+
+		if($ret){
+			echo "<script>
+					      alert('Senha alterada com sucesso');
+					      opener.location.reload();
+				         self.close();
+		  	        </script>";
+		}else{
+			echo "<script>
+				alert('Erro ao alterar senha: (".ldap_error($conn).")');
+				self.close();
+			      </script>";
+		}
+	break;
+}
+
+?>

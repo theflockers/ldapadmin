@@ -1,0 +1,39 @@
+<?php
+
+include "config/config.php";
+include "include/ldap_connection.inc";
+include "include/login_prompt.inc";
+include "logon.php";
+
+include "include/header_noimg.inc";
+
+switch($_POST['action']) {
+	case "":
+		include "html/domainaddform.phtml";
+	break;
+	case "add":
+		$domain=domain_dnparse($_POST['domain']);
+	   $domain=str_replace(",","",explode("dc=",$domain));
+      array_shift($domain);
+  	   
+	  $domdn=domain_dnparse($_POST['domain']).",ou=Domains,".$config['ldapdn'];
+	
+      include "templates/dnsdomain.inc";
+
+		$ret=@ldap_add($conn,$domdn,$info);
+		if($ret){
+			echo "<script>
+				alert('Adicionado com sucesso');
+				opener.location.reload();
+				self.close();
+		  	      </script>";
+		}else{
+			echo "<script>
+				alert('Erro ao adicionar: (".ldap_error($conn).")');
+				self.close();
+			      </script>";
+		}
+	break;
+}
+
+?>

@@ -1,0 +1,53 @@
+<body class="pop" onload="opener.location.reload()">
+<div id="formAddUser">
+
+<div class="poptitle">Propriedades do usu&aacute;rio <?php echo $object[0]['cn'][0]; ?></div>
+<br/>
+<table id="formIntAddUser">
+ <form name="edituser" method="POST" action="usermod.phtml">
+	<input type="hidden" name="action" value="modifydn" />
+	<input type="hidden" name="domain" value="<?php echo $object[0]['associateddomain'][0];?>" />
+	<tr>
+	 <td valign="top">
+ 	  <table>
+ 	     <tr><td colspan="2" class="popsubtitle" >Dom&iacute;nio: <?php echo $object[0]['associateddomain'][0];?></td>
+ 	     	</tr>
+ 		  <tr>
+  			<td style="padding: 5px;" >Login:</td>
+  			<td><input type="text" name="username" value="<?php echo $object[0]['cn'][0]; ?>"/>
+  			</td>
+ 		  </tr>
+		  <tr>
+  			<td style="padding: 5px;">Nome Real:</td>
+  			<td><input type="text" name="surename" value="<?php echo $object[0]['sn'][0]; ?>"></td>
+        </tr>
+ 		  <tr>
+  			<td style="padding: 5px;">Senha:</td>
+  			<td>Crypt(<?php echo strlen($object[0]['userpassword'][0]); ?>) Bytes <INPUT class="button" type="button" value="Alterar" onclick="openwin('pwedit.phtml?username=<?php echo $object[0]['cn'][0]; ?>&&domain=<?php echo $object[0]['associateddomain'][0]; ?>','pwd','formIntAddUser')"></td>
+ 		  </tr>
+ 		  <tr>
+  			<td style="padding: 5px;">Quota:</td>
+  			<td><input type="text" name="quota" value="<?php echo round((($object[0]['mailquota'][0]/1024)/1024)); ?>">&nbsp;<i>(MBytes)</i></td>
+ 		  </tr>
+ 		  <tr>
+  			<td style="padding: 5px;">Home:</td>
+  			<td><input type="text" name="home" value="<?php echo $object[0]['homedirectory'][0]; ?>"  onclick="alert('#### Campo somente leitura ####\n\n<?php echo $object[0]['homedirectory'][0]; ?>')" ></td>
+ 		  </tr>
+ 		  <tr>
+  			<td style="padding: 5px;">Maildir: </td>
+  			<td><input type="text" name="maildir" value="<?php echo $object[0]['mailmessagestore'][0]; ?>" onclick="alert('#### Campo somente leitura ####\n\n<?php echo $object[0]['mailmessagestore'][0]; ?>')" /></td>
+ 		  </tr>
+ 	 </table>
+    </td>
+   </tr>
+ </table>
+ <table align="center" style="padding: 5px;">
+ <tr>
+   <td><input class="button" type="submit" value="Alterar"></td>
+   <td><input class="button" type="button" value="Cancel" onclick="self.close()"></td>
+ </tr>
+</table>
+</form>
+</div>
+</body>
+</html>

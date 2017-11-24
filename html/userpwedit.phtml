@@ -1,0 +1,35 @@
+<body class="pop" onload="opener.location.reload()">
+<div id="formAddUser">
+
+<div class="poptitle">Alterar senha do usu&aacute;rio <?php echo $_GET['username']; ?></div>
+<br/>
+<table id="formIntAddUser">
+ <form name="edituser" method="POST" action="usermod.phtml">
+	<input type="hidden" name="action" value="modifypw" />
+	<input type="hidden" name="domain" value="<?php echo $_GET['domain'];?>" />
+	<input type="hidden" name="username" value="<?php echo $_GET['username'];?>"/>
+	<tr>
+	 <td valign="top">
+ 	  <table>
+ 	      <tr>	    
+ 	     	<td style="padding: 5px;" >E-mail:</td>
+ 	     	<td style="padding: 5px;"><b><?php echo $_GET['username'];?>@<?php echo $_GET['domain'];?></b></td> 	     	
+ 		  </tr>
+		  <tr>
+  			<td style="padding: 5px;">Digite a nova senha:</td>
+  			<td><input type="password" name="password" value=""></td>
+ 		  </tr>
+ 	 </table>
+    </td>
+   </tr>
+ </table>
+ <table align="center" style="padding: 5px;">
+ <tr>
+   <td><input class="button" type="submit" value="Alterar"></td>
+   <td><input class="button" type="button" value="Cancel" onclick="self.close()"></td>
+ </tr>
+</table>
+</form>
+</div>
+</body>
+</html>

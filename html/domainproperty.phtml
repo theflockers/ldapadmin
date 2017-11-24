@@ -1,0 +1,45 @@
+<body class="pop" onload="opener.location.reload()">
+<div id="formDomainUser">
+
+<div class="poptitle">Propriedades do dom&iacute;nio <?php echo $object[0]['cn'][0]; ?></div>
+<br/>
+<table id="formIntDomainUser">
+ <form name="edituser" method="POST" action="domainmod.phtml">
+	<input type="hidden" name="domain" value="<?php echo $object[0]['associateddomain'][0];?>" />
+	<tr>
+	 <td valign="top">
+ 	  <table>
+ 	     <tr><td colspan="2" class="popsubtitle" >Dom&iacute;nio: <?php echo $object[0]['associateddomain'][0];?></td>
+ 	     	</tr>
+ 		  <tr>
+  			<td style="padding: 5px;" >Descri&ccedil;&atilde;o:</td>
+  			<td><input type="text" name="description" value="<?php echo $object[0]['description'][0]; ?>"/>
+  			</td>
+ 		  </tr>
+ 		  <tr>
+  			<td style="padding: 5px;" >MailQuota:</td>
+  			<td><?php echo ($object[0]['mailquota'][0]/1024/1024); ?> <i>(Mbytes)</i>
+
+  			<!-- td><input type="text" name="mailquota" value="<?php echo ($object[0]['mailquota'][0]/1024/1024); ?>" disabled /> <i>(Mbytes)</i -->
+  			</td>
+ 		  </tr>
+	   	   <td style="padding: 5px;" >Numero de Contas:</td>
+  		   <td><?php echo ($object[0]['mailaccounts'][0]); ?>
+   		   </td>
+ 		  </tr>
+
+
+ 	 </table>
+    </td>
+   </tr>
+ </table>
+ <table align="center" style="padding: 5px;">
+ <tr>
+   <td><input class="button" type="submit" value="Alterar"></td>
+   <td><input class="button" type="button" value="Cancel" onclick="self.close()"></td>
+ </tr>
+</table>
+</form>
+</div>
+</body>
+</html>

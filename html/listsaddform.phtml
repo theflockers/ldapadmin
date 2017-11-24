@@ -1,0 +1,72 @@
+<body class="pop" onload="opener.location.reload()">
+<script>
+function valida_form() {
+	
+	var chars = Array('!','@','#','$','%',' ','&','*','(',')','"');
+	var count = 0;
+	var obj = document.getElementById("cn").value;
+	var frm = document.getElementById("adduser");
+
+	for(i in chars) {
+
+		if(obj.indexOf(chars[i])!=-1) {
+			alert("Caracteres como '"+chars[i]+"' não são permitidos");
+			exit;
+		}
+
+	}
+
+	for(i=0;i<frm.length;i++) {
+		if(frm.elements[i].value==0) {
+			alert("Campo não pode ser nulo");
+			frm.elements[i].setfocus();
+			exit;
+		}
+	}
+	frm.submit();
+
+}
+</script>
+
+<div id="formDomainUser">
+
+<form name="adduser" id="adduser" method="POST" action="listsadd.phtml">
+<input type="hidden" name="action" value="add">
+<input type="hidden" name="domain" value="<?php echo $_SESSION['domain']; ?>" />
+
+<div class="poptitle">Adicionar Lista</div>
+<br/>
+<table id="formIntDomainUser">
+	<tr>
+	 <td valign="top">
+ 	  <table>
+		  <tr>
+		   <td colspan="2" class="popsubtitle">Nova Lista</td>
+  		  </tr>
+ 		  <tr>
+  			<td style="padding: 5px;">Lista:</td>
+  			<td><input type="text" name="cn" id="cn" /></td>
+ 		  <tr>
+  			<td style="padding: 5px;" >Descri&ccedil;&atilde;o:</td>
+  			<td><input type="text" name="sn" />
+  			</td>
+ 		  </tr>
+ 		  <tr>
+  			<td style="padding: 5px;" >Endere&ccedil;o difusor:</td>
+  			<td><input name="mailforwardingaddress" />
+  			</td>
+ 		  </tr>
+ 	 </table>
+   </td>
+  </tr>
+ </table>
+ <table align="center" style="padding: 5px;">
+ <tr>
+   <td><INPUT class="button" type="button" value="Adicionar" onclick="valida_form()" /></td>
+   <td><INPUT class="button" type="button" value="Cancel" onclick="self.close()"></td>
+ </tr>
+</table>
+</form>
+</div>
+</body>
+</html>

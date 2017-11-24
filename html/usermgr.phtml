@@ -1,0 +1,123 @@
+<table cellspacing="0">
+ <tr>
+  <th class="rowtitle" style="background-image: url('images/bar.jpg')">&nbsp;</th>
+  <th class="coltitle" style="background-image: url('images/bar.jpg')" width="140">Username</th>
+  <th class="coltitle" style="background-image: url('images/bar.jpg')" width="140">Nome Real</th>
+  <!-- th class="coltitle" style="background-image: url('images/bar.jpg')" width="">Dom&iacute;nio</th -->
+  <th class="coltitle" style="background-image: url('images/bar.jpg')" width="100">Quota</th>
+  <th class="coltitle" style="background-image: url('images/bar.jpg')" width="50">Estatus</th> 
+ </tr>
+
+<?php
+	require 'include/ldap_connection.inc';	
+
+	$filter="(&(objectClass=inetmailuser)(associateddomain=".$_SESSION['domain']."))";
+
+//	echo "<script>alert('".domain_dnparse($_SESSION['domain'])."')</script>";
+
+	if($_SESSION['user']=="admin") {
+	
+		$usearch=ldap_search($conn,"ou=Domains,".$config['ldapdn'],$filter,$attr=array("cn","associateddomain","sn","inetmailuserstatus","courierusercode","mailquota","mailforwardingaddress"));
+	}else{
+		$usearch=ldap_search($conn,domain_dnparse($_SESSION['domain']).",ou=Domains,".$config['ldapdn'],$filter,$attr=array("cn","associateddomain","sn","inetmailuserstatus","courierusercode","mailmessagestore","mailquota","mailforwardingaddress","mailautoreplytext"));
+//		echo domain_dnparse($_SESSION['domain']).",ou=Domains,".$config['ldapdn'];
+
+	}
+
+	ldap_sort($conn,$usearch,"cn");
+	$userobject=ldap_get_entries($conn,$usearch);
+	$_SESSION['totalusers']=$userobject['count'];
+	
+
+	if($userobject['count']==0){
+		echo "<tr>\n";
+		echo "<td align=\"center\" class=\"rowtitle\">0</td>";
+		echo " <td colspan=\"4\" align=\"center\" class=\"rowvalue\"><i>(N&atilde;o h&aacute; usu&aacute;rios neste dom&iacute;nio)</i></td>";
+		echo "</tr>\n";
+	}
+
+	for($z=0;$z<count($userobject);$z++) {
+		echo "<tr>\n";
+		if($userobject[$z]['cn']) {
+			echo "<td align=\"center\" class=\"rowtitle\" style=\"background-image: url('images/bar.jpg')\">".($z+1)."</td>";
+/*			echo "<td class=\"rowvalue\">".$userobject[$z]['cn'][0]."</td>";*/
+			echo "<td class=\"rowvalue\" style='padding: 0px;'>";
+	
+			/* Rotina que mostra o input quando clicado duas vezes no campo */
+			echo "<table>";
+			echo " <tr class='hide' id='ipt_username_$z'> ";
+			echo "  <td class='rowvalue_noborder'><input class='ipt_rowvalue' type='text' name='username' value='".$userobject[$z]['cn'][0]."' ondblclick=\"ipt_show('cn_usermgr_$z','ipt_username_$z')\"></td>";
+			echo " </tr>";
+			echo " <tr id='cn_usermgr_$z'>";
+			echo "  <td class='rowvalue_noborder' ondblclick=\"ipt_show('ipt_username_$z','cn_usermgr_$z')\">".$userobject[$z]['cn'][0]."</td>";
+			echo " </tr>";
+			echo "</table>";
+			/* End of Rotnine */
+
+			echo "</td>";
+			echo "<td class=\"rowvalue\">".$userobject[$z]['sn'][0]."</td>";
+//			echo "<td class=\"rowvalue\">".$userobject[$z]['associateddomain'][0]."</td>";
+			
+			$quota=exec("sudo bin/quotausage.php ".$userobject[$z]['mailmessagestore'][0]);
+			$quota=explode(" ",$quota);
+			echo "<td class=\"rowvalue\">";
+
+			if(printquota($quota[0],$userobject[$z]['cn'][0])==0) {
+				echo "<div style='border: solid #bbb 1px'>";
+				if($quota[0]!=0) {
+					echo "<img src='images/cache/".$userobject[$z]['cn'][0]."_usage.png' title='".round(($quota[1] /1024/1024),2)." MB usados' />";
+				}
+				echo "<img src='images/cache/".$userobject[$z]['cn'][0]."_avaliable.png' title='".round((($quota[2]-$quota[1])/1024/1024),2)." MB restantes' />";
+				echo "</div>";
+			}else{
+				echo "<img src='images/cache/".$userobject[$z]['cn'][0]."_usage.png' title='".round(($quota[1] /1024/1024),2)." MB usados' />";
+			}
+			echo "</td>";
+			echo "<td class=\"rowvalue\">".$userobject[$z]['inetmailuserstatus'][0]."</td>";
+			echo "<td>";
+			if($userobject[$z]['cn'][0]!="postmaster") {
+
+				echo "<a onclick=\"asktodo('index.php?menuopt=del&&domain=".$_GET['domain']."&&dn=".$userobject[$z]['dn']."','Deseja excluir o usuario ".$userobject[$z]['cn'][0]."?')\"><img src=\"images/delete.png\" title='Excluir' />";
+			}
+			echo "</td>";
+			echo "<td><a onclick=\"openwin('property.phtml?obj=user&&dn=".$userobject[$z]['dn']."','add','usrdom_menu')\"><img src=\"images/Repair.png\" title='Modificar' /></td>";
+			
+			if(!$userobject[$z]['mailforwardingaddress']) {
+				echo "<td><a onclick=\"openwin('property.phtml?obj=redirect&&dn=".$userobject[$z]['dn']."','add','usrdom_menu')\">";
+				echo "<img src=\"images/forward.png\" title='Redirecionar' />";
+			}else{
+				echo "<td><a onclick=\"asktodo('index.php?menuopt=cancelredir&&dn=".$userobject[$z]['dn']."&&mailforwardingaddress=".$userobject[$z]['mailforwardingaddress'][0]."','Deseja excluir o redirecionamento para ".$userobject[$z]['mailforwardingaddress'][0]."?')\">";
+				echo "<img src=\"images/cancel_forward.png\" title='Cancelar Redirecionamento' />";
+			}
+			
+			// AutoResposta
+			if(!$userobject[$z]['mailautoreplytext']) {
+				echo "<td><a onclick=\"openwin('property.phtml?obj=autoresposta&&dn=".$userobject[$z]['dn']."','add','usrdom_menu')\">";
+				echo "<img src=\"images/autoresp.png\" title='Auto-Reposta' />";
+			}else{
+				echo "<td><a onclick=\"asktodo('index.php?menuopt=cancelautoresposta&&dn=".$userobject[$z]['dn']."','Deseja retirar a autoresposta do usuario ".$userobject[$z]['cn'][0]."?')\">";
+				echo "<img src=\"images/cancel_autoresp.png\" title='Cancelar Autoresposta' />";
+			}
+			// - End autoresposta //
+			echo "</td>";
+			
+			$totalQuotaUsage+=$userobject[$z]['mailquota'][0];
+			$domainQuota+=$quota[1];
+		}
+
+//echo "<pre>";
+//print_r($userobject);
+		echo "</tr>\n";
+	}
+	$percent=round($domainQuota * 100 / $_SESSION['mailquota']);
+	printquota($percent,$_SESSION['domain']);
+
+	$_SESSION['quotaforcreate']=($_SESSION['mailquota']-$totalQuotaUsage);
+?>
+</table>
+<script>
+	if(GetBrowser()=="NS")
+		document.getElementById('domains').style.visibility='visible';
+	else
+		document.getElementById('domains').style.display='inline';
+</script>

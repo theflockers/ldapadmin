@@ -1,0 +1,19 @@
+<?php
+
+include "config/config.php";
+include "include/ldap_connection.inc";
+include "logon.php";
+
+foreach($_GET['member'] as $member) {
+	$info['rfc822mailmember'][]=$member;
+}
+
+// DEBUG
+
+if(ldap_modify($conn,$_GET['dn'],$info)) {
+	echo "Adicionado";	
+}else {
+	echo ldap_error($conn);
+}
+
+?>

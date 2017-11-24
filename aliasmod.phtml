@@ -1,0 +1,30 @@
+<?php
+
+include "config/config.php";
+include "include/ldap_connection.inc";
+include "logon.php";
+//include "include/functions.php";
+
+include "include/header_noimg.inc";
+
+ 	   
+	  $dn="cn=".$_POST['mail'].",ou=Aliases,".$config['ldapdn'];
+
+  	   include "templates/inetmailuser-alias.inc";
+		
+  	   
+		$ret=@ldap_modify($conn,$dn,$info);
+
+		if($ret){
+			echo "<script>
+					      alert('Alias alterado com sucesso');
+					      opener.location.reload();
+				         self.close();
+		  	        </script>";
+		}else{
+			echo "<script>
+				alert('Erro ao alterar alias: (".ldap_error($conn).")');
+				self.close();
+			      </script>";
+ 		}			      
+?>

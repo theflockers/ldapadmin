@@ -1,0 +1,9 @@
+<?php
+
+$filter="(&(objectClass=inetmailuser)";
+	
+//$usearch=ldap_search($conn,"ou=Domains,".$config['ldapdn'],$filter,$attr=array("cn","associateddomain","sn","inetmailuserstatus","courierusercode"));
+$usearch=ldap_search($conn,$_GET['dn'],$filter,$attr=array("cn","associateddomain","sn","inetmailuserstatus","courierusercode"));
+$userobject=ldap_get_entries($conn,$usearch);
+
+?>

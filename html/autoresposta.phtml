@@ -1,0 +1,36 @@
+<body class="pop" onload="opener.location.reload()">
+<div id="formAddUser">
+
+<div class="poptitle">AutoResposta do usu&aacute;rio <?php echo $object[0]['cn'][0]; ?></div>
+<br/>
+<table id="formIntAddUser">
+ <form name="edituser" method="POST" action="autoresposta.phtml">
+	<input type="hidden" name="action" value="modifydn" />
+	<input type="hidden" name="username" value="<?php echo $object[0]['cn'][0]; ?>" />
+	<input type="hidden" name="surename" value="<?php echo $object[0]['sn'][0]; ?>" />
+	<input type="hidden" name="domain" value="<?php echo $object[0]['associateddomain'][0];?>" />
+	<tr>
+	 <td valign="top">
+ 	  <table>
+ 	     <tr><td colspan="2" class="popsubtitle" >Usu&aacute;rio: <?php echo $object[0]['cn'][0]."@".$object[0]['associateddomain'][0];?></td>
+ 	     	</tr>
+		<tr>
+  		 <td style="padding: 5px;">Assunto:</td>
+  		 <td><input type="text" name="mailAutoReplySubject" value="<?php echo $object[0]['mailautoreplysubject'][0]; ?>"></td>
+		</tr>
+		<tr>
+  		 <td style="padding: 5px;">Texto do E-mail:</td>
+  		 <td><textarea  name="mailAutoReplyText" ><?php echo $object[0]['mailautoreplytext'][0]; ?></textarea></td>
+		</tr>
+	</table>
+ </table>
+ <table align="center" style="padding: 5px;">
+  <tr>
+   <td><input class="button" type="submit" value="Alterar"></td>
+   <td><input class="button" type="button" value="Cancel" onclick="self.close()"></td>
+ </tr>
+</table>
+</form>
+</div>
+</body>
+</html>

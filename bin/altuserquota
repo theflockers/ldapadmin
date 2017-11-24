@@ -1,0 +1,8 @@
+#!/bin/sh
+
+MAILDIR=$1
+
+rm -f $MAILDIR/maildirsize
+maildirmake -q $2"S" $MAILDIR
+chmod -R 700 $MAILDIR/maildirsize
+chown -R 200:200 $MAILDIR/maildirsize

@@ -1,0 +1,37 @@
+<body class="pop" onload="opener.location.reload()">
+<div id="formDomainUser">
+
+<div class="poptitle">Propriedades do Alias <?php echo $object[0]['mail'][0]; ?></div>
+<br/>
+<table id="formIntDomainUser">
+ <form name="edituser" method="POST" action="aliasmod.phtml">
+	<input type="hidden" name="mail" value="<?php echo $object[0]['mail'][0];?>" />
+	<tr>
+	 <td valign="top">
+ 	  <table>
+ 	     <tr><td colspan="2" class="popsubtitle" >Alias: <?php echo $object[0]['mail'][0];?></td>
+ 	     	</tr>
+ 		  <tr>
+  			<td style="padding: 5px;" >Descri&ccedil;&atilde;o:</td>
+  			<td><input type="text" name="sn" value="<?php echo $object[0]['sn'][0]; ?>"/>
+  			</td>
+ 		  </tr> 	     	
+ 		  <tr>
+  			<td style="padding: 5px;" >Encaminha para:</td>
+  			<td><textarea name="mailforwardingaddress" rows="4" cols="32"><?php echo $object[0]['mailforwardingaddress'][0]; ?></textarea>
+  			</td>
+ 		  </tr>
+ 	 </table>
+    </td>
+   </tr>
+ </table>
+ <table align="center" style="padding: 5px;">
+ <tr>
+   <td><input class="button" type="submit" value="Alterar"></td>
+   <td><input class="button" type="button" value="Cancel" onclick="self.close()"></td>
+ </tr>
+</table>
+</form>
+</div>
+</body>
+</html>

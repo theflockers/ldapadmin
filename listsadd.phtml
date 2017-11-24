@@ -1,0 +1,77 @@
+<?php
+
+session_start();
+
+include "config/config.php";
+include "include/ldap_connection.inc";
+include "logon.php";
+
+include "include/header_noimg.inc";
+
+switch($_POST['action']) {
+	case "add":
+
+	  /* pase the domain, generation the format as a ldap dn */	
+	  $domain_dn=domain_dnparse($_SESSION['domain']);
+	  /* listdn */
+	  $dn="cn=".$_POST['cn'].",".$domain_dn.",ou=Lists,".$config['ldapdn'];
+	  $list=$_POST['cn'];	  
+	
+	  /* the lists template */
+	  include "templates/inetmaillists.inc";
+
+		$ret=@ldap_add($conn,$dn,$info);
+
+		/* If the last transaction return true, create aliases array */
+		if($ret){
+			include "include/clistaliasfile.php";
+			
+			$aliases[0]['alias'] = "owner-".$list; 
+			$aliases[0]['mailto'] = "postmaster@".$_SESSION['domain']; 
+			$aliases[1]['alias'] = $list."-owner";
+			$aliases[1]['mailto'] = "postmaster@".$_SESSION['domain'];
+			$aliases[2]['alias'] = $list."-request";
+			$aliases[2]['mailto'] = $list."-request-".$_SESSION['domain'];
+			$aliases[3]['alias'] = $list."-approval";
+			$aliases[3]['mailto'] = "postmaster@".$_SESSION['domain'];
+
+			/* For each value in the array, create an alias for it */
+			for($i=0;$i<count($aliases);$i++) {
+
+				$pieces[0]=$aliases[$i]['alias']; /* the alias name */
+				$_POST['mail']=$aliases[$i]['alias']; /* the addresss the mail will go to */
+				$_POST['sn']=$aliases[$i]['alias']; /* the description */
+				$_POST['mailforwardingaddress']=$aliases[$i]['mailto']; /* the mailto */
+
+				/* Unset the last */
+				unset($info);
+				
+				/* the alias template */
+				include "templates/inetmailuser-alias.inc";
+				/* Create the DN for the lda_add */
+		                $dn="cn=".$pieces[0].",".$domain_dn.",ou=Lists,".$config['ldapdn'];
+				ldap_add($conn,$dn,$info); /* add */
+			}
+			/* Output the operation success */
+			echo "<script>
+				alert('Alias adicionado com sucesso');
+				opener.location.reload();
+				self.close();
+		  	      </script>"; 
+		}else{
+			/* Output if error */
+			echo "<script>
+				alert('Erro ao adicionar alias: (".ldap_error($conn).")');
+				self.close();
+			      </script>";
+		}
+
+//	echo "<pre>";
+//	print_r($info);
+	break;
+	default:
+		include "html/listsaddform.phtml";
+	break;
+}
+
+?>

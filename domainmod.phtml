@@ -1,0 +1,33 @@
+<?php
+
+include "config/config.php";
+include "include/ldap_connection.inc";
+include "logon.php";
+
+include "include/header_noimg.inc";
+
+		$domain=domain_dnparse($_POST['domain']);
+	   $domain=str_replace(",","",explode("dc=",$domain));
+      array_shift($domain);
+  	   
+	  $domdn=domain_dnparse($_POST['domain']).",ou=Domains,".$config['ldapdn'];
+
+  	   include "templates/dnsdomain.inc";
+		
+  	   
+		$ret=@ldap_modify($conn,$domdn,$info);
+
+		if($ret){
+			$_SESSION['mailquota']=$info['mailQuota'];
+			echo "<script>
+					      alert('Dominio alterado com sucesso');
+					      opener.location.reload();
+				         self.close();
+		  	        </script>";
+		}else{
+			echo "<script>
+				alert('Erro ao alterar dominio: (".ldap_error($conn).")');
+				self.close();
+			      </script>";
+ 		}			      
+?>

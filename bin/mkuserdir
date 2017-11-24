@@ -1,0 +1,13 @@
+#!/bin/sh
+
+DIR=$1
+
+if [ ! -d $DIR ];then
+	mkdir -p $DIR
+	maildirmake $DIR/Maildir
+	maildirmake -q $2"S" $DIR/Maildir
+
+	chmod -R 700 $DIR
+	chown -R 200:200 $DIR
+
+fi

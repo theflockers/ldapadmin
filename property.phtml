@@ -1,0 +1,58 @@
+<?php
+
+include "config/config.php";
+//include "include/login_prompt.inc";
+include "logon.php";
+include "include/ldap_connection.inc";
+include "include/header_noimg.inc";
+
+switch($_GET['obj']) {
+		case "user":
+				$filter="(&(objectClass=inetmailuser))";
+	
+				//$usearch=ldap_search($conn,"ou=Domains,".$config['ldapdn'],$filter,$attr=array("cn","associateddomain","sn","inetmailuserstatus","courierusercode"));
+				$search=ldap_search($conn,$_GET['dn'],$filter,array("*"));
+				$object=ldap_get_entries($conn,$search);
+
+				include "html/userproperty.phtml";
+				
+		break;
+		case "domain":
+				$filter="(&(objectClass=dnsdomain))";
+				//$usearch=ldap_search($conn,"ou=Domains,".$config['ldapdn'],$filter,$attr=array("cn","associateddomain","sn","inetmailuserstatus","courierusercode","mailquota","mailaccounts"));
+				$search=ldap_search($conn,$_GET['dn'],$filter,array("*"));
+				$object=ldap_get_entries($conn,$search);
+				include "html/domainproperty.phtml";
+		break;
+		case "alias":
+				$filter="(&(objectClass=inetmailuser))";
+	
+				//$usearch=ldap_search($conn,"ou=Domains,".$config['ldapdn'],$filter,$attr=array("cn","associateddomain","sn","inetmailuserstatus","courierusercode"));
+				$search=ldap_search($conn,$_GET['dn'],$filter,array("*"));
+				$object=ldap_get_entries($conn,$search);
+				include "html/aliasproperty.phtml";
+		break;
+		case "lists":
+				$filter="(&(objectClass=inetmailgroup))";
+	
+				//$usearch=ldap_search($conn,"ou=Lists,".$config['ldapdn'],$filter,$attr=array("cn","associateddomain"));
+				$search=ldap_search($conn,$_GET['dn'],$filter,array("*"));
+				$object=ldap_get_entries($conn,$search);
+				include "html/listsproperty.phtml";
+		break;
+		case "redirect":
+				$filter="(&(objectClass=inetmailuser))";
+				$search=ldap_search($conn,$_GET['dn'],$filter,array("*"));
+				$object=ldap_get_entries($conn,$search);
+				include "html/redirect.phtml";
+		break;
+		case "autoresposta":
+				$filter="(&(objectClass=inetmailuser))";
+				$search=ldap_search($conn,$_GET['dn'],$filter,array("*"));
+				$object=ldap_get_entries($conn,$search);
+				include "html/autoresposta.phtml";
+		break;
+
+}
+
+?>

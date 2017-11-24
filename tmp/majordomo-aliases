@@ -1,0 +1,14 @@
+# lmendes.info
+majordomo-lmendes.info:		"|/usr/share/majordomo/wrapper majordomo -C  /mail/lists/lmendes.info/config/majordomo.cf"
+suporte-list-lmendes.info:	:include:/mail/lists/lmendes.info/suporte
+suporte-lmendes.info:		"|/usr/share/majordomo/wrapper resend -C  /mail/lists/lmendes.info/config/majordomo.cf -l suporte-list-lmendes.info suporte-archive-lmendes.info"
+suporte-request-lmendes.info:	"|/usr/share/majordomo/wrapper  majordomo -C  /mail/lists/lmendes.info/config/majordomo.cf -l suporte-lmendes.info"
+suporte-archive-lmendes.info:	"|/usr/share/majordomo/wrapper archive2.pl -f  /mail/lists/lmendes.info/lists/suporte.archive/msg -a -M"
+
+# lmendes.info
+majordomo-lmendes.info:		"|/usr/share/majordomo/wrapper majordomo -C  /mail/lists/lmendes.info/config/majordomo.cf"
+teste-list-lmendes.info:	:include:/mail/lists/lmendes.info/teste
+teste-lmendes.info:		"|/usr/share/majordomo/wrapper resend -C  /mail/lists/lmendes.info/config/majordomo.cf -l teste-list-lmendes.info teste-archive-lmendes.info"
+teste-request-lmendes.info:	"|/usr/share/majordomo/wrapper  majordomo -C  /mail/lists/lmendes.info/config/majordomo.cf -l teste-lmendes.info"
+teste-archive-lmendes.info:	"|/usr/share/majordomo/wrapper archive2.pl -f  /mail/lists/lmendes.info/lists/teste.archive/msg -a -M"
+

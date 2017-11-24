@@ -1,0 +1,20 @@
+<?php
+
+include "config/config.php";
+include "include/ldap_connection.inc";
+include "logon.php";
+
+
+//echo print_r($_GET['member']);
+
+foreach($_GET['member'] as $member) {
+	$info['rfc822mailmember'][]=$member;
+}
+
+if(ldap_mod_del($conn,$_GET['dn'],$info)){
+	echo "Removido com sucesso";
+}else{
+	echo ldap_error($conn);
+}
+
+?>

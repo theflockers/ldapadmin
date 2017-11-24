@@ -1,0 +1,27 @@
+<!-- Menu Usuarios e dominios -->
+<div id="usrdom_menu" onclick="showmenu('usrdom_menu')">
+ <a class="rightmenu" onclick="openwin('domainadd.phtml','add','usrdom_menu')" >Novo dom&iacute;nio</a>
+</div>
+
+<div id="alias_menu" onclick="showmenu('alias_menu')">
+ <a class="rightmenu" onclick="openwin('aliasadd.phtml','add','alias_menu')" >Novo alias</a>
+</div>
+
+<table class="menu">
+ <tr> 
+  <td><img src="images/Repair.png" align="bottom" /></td>
+  <td><a id="usrdom" class="linktitle" onclick="selectItem('usrdom')" ondblclick="show('domains')"  onmousedown="rightmenu(event,'usrdom','usrdom_menu')">Usu&aacute;rios e Dom&iacute;nios</a ></td>
+ </tr>
+ <?php include "include/domain_menu.inc"; ?>
+ <tr>
+  <td><img src="images/Repair.png"/></td>
+   <td><a id="aliasmenu" class="linktitle" onclick="openlocation('?menuopt=alias','aliasmenu')" ondblclick="show('aliases')" onmousedown="rightmenu(event,'aliasmenu','alias_menu')">Aliases</a></td> 
+ </tr>
+ <tr>
+  <td><img src="images/Repair.png"/></td>
+   <td><a id="aliasmenu" class="linktitle" onclick="openlocation('?menuopt=alias','aliasmenu')" ondblclick="show('aliases')" onmousedown="rightmenu(event,'aliasmenu','alias_menu')">Listas</a></td> 
+ </tr>
+
+  </table>
+
+

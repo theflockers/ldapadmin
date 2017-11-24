@@ -1,0 +1,62 @@
+<?php
+
+session_start();
+
+include "config/config.php";
+include "include/ldap_connection.inc";
+include "logon.php";
+include "include/class.php";
+
+include "include/header_noimg.inc";
+
+$UserPref=new AdminDB;
+
+switch($_POST['action']) {
+	case "":
+
+		if($_SESSION['totalusers'] <= $_SESSION['mailaccounts']) {
+			include "html/useraddform.phtml";
+		}else{
+			echo "<script>
+			       alert('Atingindo numero máximo de usuários');
+			       self.close();
+		        </script>";
+		}
+	break;
+	case "add":
+		$userdn=user_dnparse($_POST['username'],$_POST['domain']).",ou=Domains,".$config['ldapdn'];
+		$CurrQuota=(($_POST['quota']*1024)*1024);
+		echo $CurrQuota."<br>".$_SESSION['quotaforcreate'];
+
+		if( $CurrQuota > $_SESSION['quotaforcreate']) {
+			echo "<script>
+			       alert('Não há quota suficiente');
+			       history.back();
+			      </script>";
+		} else {
+
+			include "templates/inetmailuser.inc";
+		
+	
+			$ret=@ldap_add($conn,$userdn,$info);
+			if($ret){
+				shell_exec("sudo bin/mkuserdir ".$info['homeDirectory']." ".$info['mailQuota']);
+				echo "<pre>";
+				$UserPref->add_userinfo($config['dsn'],$info);
+				echo "</pre>";
+				echo "<script>
+					alert('Adicionado com sucesso');
+					opener.location.reload();
+					self.close();
+			  	      </script>";
+			}else{
+				echo "<script>
+					alert('Erro ao adicionar: (".ldap_error($conn).")');
+					self.close();
+				      </script>";
+			}
+		}
+	break;
+}
+
+?>
